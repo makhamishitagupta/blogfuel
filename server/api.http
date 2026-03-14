@@ -1,0 +1,174 @@
+@baseUrl = http://localhost:5000
+@token = 926022c6abda8c667dc866f47ca2ad0c78cff26c9357fb706b7a72169bee8b9b
+@blogId = 69b519b414ea89507769d38f
+@commentId = 69b51a2c14ea89507769d3c4
+@announcementId = 69b51a9614ea89507769d3de
+
+### Users
+
+### Register User
+POST http://localhost:5000/user/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "123456"
+}
+
+### Login User
+POST {{baseUrl}}/user/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "123456"
+}
+
+### Get Profile
+GET {{baseUrl}}/user/me
+x-auth-token: {{token}}
+
+### Update Profile
+POST {{baseUrl}}/user/update-profile
+x-auth-token: {{token}}
+Content-Type: application/json
+
+{
+  "name": "Updated Name"
+}
+
+### Logout User
+POST {{baseUrl}}/user/logout
+x-auth-token: {{token}}
+
+### Delete Profile
+DELETE {{baseUrl}}/user/delete-profile
+x-auth-token: {{token}}
+
+### Create Admin (Admin Only)
+POST {{baseUrl}}/user/admin/create
+x-auth-token: {{token}}
+Content-Type: application/json
+
+{
+  "name": "Admin User",
+  "email": "admin@example.com",
+  "password": "admin123"
+}
+
+### Blogs
+
+### Get All Blogs
+GET {{baseUrl}}/blog/getAll
+
+### Get Blog by ID
+GET {{baseUrl}}/blog/getById/{{blogId}}
+
+### Create Blog (Admin Only)
+POST {{baseUrl}}/blog/create
+x-auth-token: {{token}}
+Content-Type: application/json
+
+{
+  "title": "Sample Blog Title",
+  "content": "This is the content of the blog post."
+}
+
+### Update Blog (Admin Only)
+PUT {{baseUrl}}/blog/update/{{blogId}}
+x-auth-token: {{token}}
+Content-Type: application/json
+
+{
+  "title": "Updated Blog Title",
+  "content": "Updated content of the blog post."
+}
+
+### Delete Blog (Admin Only)
+DELETE {{baseUrl}}/blog/delete/{{blogId}}
+x-auth-token: {{token}}
+
+### Search Blogs
+GET {{baseUrl}}/blog/search?query=Updated Blog Title
+
+### Likes
+
+### Like Blog
+POST {{baseUrl}}/blog/{{blogId}}/like
+x-auth-token: {{token}}
+
+### Unlike Blog
+POST {{baseUrl}}/blog/{{blogId}}/unlike
+x-auth-token: {{token}}
+
+### Get Blog Likes
+GET {{baseUrl}}/blog/{{blogId}}/likes
+
+### Favorites
+
+### Toggle Favorite Blog
+POST {{baseUrl}}/blog/{{blogId}}/favorite
+x-auth-token: {{token}}
+
+### Get Favorite Blogs
+GET {{baseUrl}}/blog/favorites
+x-auth-token: {{token}}
+
+### Comments
+
+### Get Blog Comments
+GET {{baseUrl}}/comment/{{blogId}}
+
+### Create Comment
+POST {{baseUrl}}/comment/{{blogId}}
+x-auth-token: {{token}}
+Content-Type: application/json
+
+{
+  "text": "This is a sample comment."
+}
+
+### Update Comment
+PUT {{baseUrl}}/comment/{{blogId}}/{{commentId}}
+x-auth-token: {{token}}
+Content-Type: application/json
+
+{
+  "text": "Updated comment text."
+}
+
+### Delete Comment
+DELETE {{baseUrl}}/comment/{{blogId}}/{{commentId}}
+x-auth-token: {{token}}
+
+### Announcements
+
+### Get All Announcements
+GET {{baseUrl}}/announcement/viewAll
+
+### Create Announcement (Admin Only)
+POST {{baseUrl}}/announcement/create
+x-auth-token: {{token}}
+Content-Type: application/json
+
+{
+  "title": "Important Announcement",
+  "content": "This is an important announcement.",
+  "important": true
+}
+
+### Update Announcement (Admin Only)
+PUT {{baseUrl}}/announcement/update/{{announcementId}}
+x-auth-token: {{token}}
+Content-Type: application/json
+
+{
+  "title": "Updated Announcement Title",
+  "content": "Updated announcement content.",
+  "important": false
+}
+
+### Delete Announcement (Admin Only)
+DELETE {{baseUrl}}/announcement/delete/{{announcementId}}
+x-auth-token: {{token}}
