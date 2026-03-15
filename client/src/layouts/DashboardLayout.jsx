@@ -35,7 +35,7 @@ const DashboardLayout = ({ type }) => {
     <div className="flex min-h-screen bg-slate-50 text-[var(--color-text)]">
       <button
         type="button"
-        className="fixed left-4 top-4 z-30 inline-flex items-center rounded-full bg-white p-2 text-slate-700 shadow-md ring-1 ring-slate-200 transition md:hidden"
+        className="fixed right-4 top-4 z-30 inline-flex items-center rounded-full bg-white p-2 text-slate-700 shadow-md ring-1 ring-slate-200 transition md:hidden"
         onClick={() => setIsSidebarOpen((prev) => !prev)}
         aria-label="Toggle sidebar"
       >
