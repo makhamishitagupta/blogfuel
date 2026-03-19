@@ -11,18 +11,33 @@ const FavoriteButton = ({ saved = false, compact = false, onToggle, disabled = f
       type="button"
       onClick={handleClick}
       disabled={disabled || !onToggle}
-      className={`inline-flex items-center gap-1 rounded-full text-xs font-medium transition ${
-        compact ? 'px-1.5 py-0.5' : 'px-2.5 py-1'
-      } ${
-        saved
-          ? 'bg-amber-50 text-amber-700 ring-1 ring-amber-100'
-          : 'text-slate-500 hover:bg-slate-100'
-      } disabled:cursor-not-allowed disabled:opacity-60`}
+      className={`group inline-flex items-center gap-1.5 rounded-full font-semibold transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 ${
+        compact ? 'px-2 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'
+      }`}
+      style={{
+        background: saved ? 'var(--color-primary)' : 'transparent',
+        color: saved ? '#ffffff' : 'var(--color-text-muted)',
+        border: saved ? '1px solid var(--color-primary)' : '1px solid var(--color-border)',
+      }}
+      onMouseEnter={e => {
+        if (!disabled && onToggle) {
+          e.currentTarget.style.background = saved ? 'var(--color-primary-hover)' : 'var(--color-surface)';
+          e.currentTarget.style.color = saved ? '#ffffff' : 'var(--color-text)';
+        }
+      }}
+      onMouseLeave={e => {
+        if (!disabled && onToggle) {
+          e.currentTarget.style.background = saved ? 'var(--color-primary)' : 'transparent';
+          e.currentTarget.style.color = saved ? '#ffffff' : 'var(--color-text-muted)';
+        }
+      }}
     >
       <Bookmark
-        className={`h-3.5 w-3.5 ${
-          saved ? 'fill-amber-500 text-amber-500' : ''
-        }`}
+        className="h-3.5 w-3.5 transition-transform group-hover:scale-110"
+        style={{
+          fill: saved ? '#ffffff' : 'transparent',
+          color: saved ? '#ffffff' : 'inherit'
+        }}
       />
       {!compact && <span>{saved ? 'Saved' : 'Save'}</span>}
     </button>
@@ -30,4 +45,3 @@ const FavoriteButton = ({ saved = false, compact = false, onToggle, disabled = f
 };
 
 export default FavoriteButton;
-

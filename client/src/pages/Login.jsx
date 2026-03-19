@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { LogIn } from 'lucide-react';
-import { useLocation } from 'react-router-dom';
+import { LogIn, ArrowRight } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -16,12 +16,8 @@ const Login = () => {
     try {
       setError('');
       setSubmitting(true);
-
       const idToken = credentialResponse.credential;
-      if (!idToken) {
-        throw new Error('No ID token received from Google');
-      }
-
+      if (!idToken) throw new Error('No ID token received from Google');
       await googleLogin(idToken);
     } catch (err) {
       const message =
@@ -58,75 +54,168 @@ const Login = () => {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
-      <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--color-primary)] text-white shadow-sm">
-          <LogIn className="h-4 w-4" />
+    <div className="flex min-h-[80vh] items-center justify-center px-4 py-10">
+      <div
+        className="w-full max-w-4xl overflow-hidden rounded-2xl shadow-2xl flex"
+        style={{ border: '1px solid var(--color-border)' }}
+      >
+        {/* Left panel — purple gradient */}
+        <div
+          className="hidden lg:flex lg:w-5/12 flex-col justify-between p-10 relative overflow-hidden"
+          style={{ background: 'linear-gradient(160deg, #3b0764 0%, #5b21b6 50%, #7c3aed 100%)' }}
+        >
+          {/* Decorative blobs */}
+          <div
+            className="pointer-events-none absolute"
+            style={{ top: '-60px', right: '-60px', width: '220px', height: '220px', borderRadius: '50%', background: 'rgba(168,85,247,0.25)', filter: 'blur(30px)' }}
+          />
+          <div
+            className="pointer-events-none absolute"
+            style={{ bottom: '-40px', left: '-40px', width: '180px', height: '180px', borderRadius: '50%', background: 'rgba(124,58,237,0.35)', filter: 'blur(25px)' }}
+          />
+
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-8">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-white text-xs font-bold">
+                BF
+              </div>
+              <span className="text-lg font-bold text-white">BlogFuel</span>
+            </div>
+            <h2 className="text-2xl font-black text-white leading-tight mb-3">
+              Your thoughts deserve a platform.
+            </h2>
+            <p className="text-sm text-white/70 leading-relaxed">
+              Sign in to continue your reading journey, manage your blogs, and connect with a community of creators.
+            </p>
+          </div>
+
+          <div className="relative z-10">
+            <blockquote className="text-sm text-white/60 italic border-l-2 border-white/30 pl-4">
+              "The best time to write was yesterday. The second best time is now."
+            </blockquote>
+          </div>
         </div>
-        <div>
-          <h1 className="text-sm font-semibold text-slate-900">Welcome back</h1>
-          <p className="text-xs text-[var(--color-text-light)]">
-            Log in to continue reading and managing your dashboard.
+
+        {/* Right panel — form */}
+        <div
+          className="flex-1 p-8 sm:p-10"
+          style={{ background: 'var(--color-surface-elevated)' }}
+        >
+          <div className="mb-6">
+            <div
+              className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl"
+              style={{ background: 'rgba(124,58,237,0.12)' }}
+            >
+              <LogIn className="h-5 w-5" style={{ color: 'var(--color-primary)' }} />
+            </div>
+            <h1 className="text-2xl font-black" style={{ color: 'var(--color-text)' }}>
+              Welcome Back
+            </h1>
+            <p className="mt-1 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+              Log in to continue reading and managing your dashboard.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="mb-1.5 block text-xs font-semibold" style={{ color: 'var(--color-text)' }}>
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="you@example.com"
+                className="input-base"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <div className="mb-1.5 flex items-center justify-between">
+                <label className="text-xs font-semibold" style={{ color: 'var(--color-text)' }}>
+                  Password
+                </label>
+                <button
+                  type="button"
+                  className="text-xs font-medium transition-colors duration-200"
+                  style={{ color: 'var(--color-primary)' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-primary-soft)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-primary)'; }}
+                >
+                  Forgot password?
+                </button>
+              </div>
+              <input
+                type="password"
+                placeholder="••••••••"
+                className="input-base"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            {error && (
+              <p
+                className="rounded-lg px-3 py-2 text-xs text-red-400"
+                style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}
+              >
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="btn-primary w-full justify-center py-3 text-sm disabled:opacity-60"
+            >
+              {submitting ? 'Signing in…' : 'Sign In'}
+              {!submitting && <ArrowRight className="ml-1 h-4 w-4" />}
+            </button>
+
+            {/* Divider */}
+            <div className="relative my-2">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full" style={{ borderTop: '1px solid var(--color-border)' }} />
+              </div>
+              <div className="relative flex justify-center text-[10px] uppercase tracking-wider">
+                <span
+                  className="px-2 font-medium"
+                  style={{ background: 'var(--color-surface-elevated)', color: 'var(--color-text-muted)' }}
+                >
+                  or continue with
+                </span>
+              </div>
+            </div>
+
+            <div className="flex w-full justify-center">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                width="400"
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+              />
+            </div>
+          </form>
+
+          <p className="mt-6 text-center text-xs" style={{ color: 'var(--color-text-muted)' }}>
+            Don't have an account?{' '}
+            <Link
+              to="/register"
+              className="font-semibold transition-colors duration-200"
+              style={{ color: 'var(--color-primary)' }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-primary-soft)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-primary)'; }}
+            >
+              Sign Up
+            </Link>
           </p>
         </div>
       </div>
-
-      <form onSubmit={handleSubmit} className="space-y-3 text-sm">
-        <div>
-          <label className="mb-1 block text-xs font-medium text-slate-700">Email</label>
-          <input
-            type="email"
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-[var(--color-primary)] focus:bg-white focus:outline-none"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-xs font-medium text-slate-700">Password</label>
-          <input
-            type="password"
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-[var(--color-primary)] focus:bg-white focus:outline-none"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        {error && (
-          <p className="text-xs text-red-600">
-            {error}
-          </p>
-        )}
-        <button
-          type="submit"
-          disabled={submitting}
-          className="btn-primary w-full justify-center disabled:opacity-60"
-        >
-          {submitting ? 'Signing in…' : 'Log in'}
-        </button>
-
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-slate-200" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-2 text-slate-500">Or</span>
-          </div>
-        </div>
-
-        <div className="flex w-full justify-center">
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={handleGoogleError}
-            width="400"
-            theme="outline"
-            size="large"
-            text="continue_with"
-            shape="rectangular"
-          />
-        </div>
-      </form>
     </div>
   );
 };
 
 export default Login;
-

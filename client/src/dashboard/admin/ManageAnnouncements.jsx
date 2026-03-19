@@ -89,70 +89,104 @@ const ManageAnnouncements = () => {
   return (
     <div className="space-y-6">
       <header>
-        <h1 className="text-sm font-semibold text-slate-900">Manage Announcements</h1>
-        <p className="text-xs text-[var(--color-text-light)]">
+        <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Manage Announcements</h1>
+        <p className="mt-1 text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Keep your community informed with latest updates and news.
         </p>
       </header>
 
-      <section className="card bg-white shadow-sm ring-1 ring-slate-200 p-6 rounded-2xl">
-        <div className="mb-4 flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[var(--color-primary)] text-white shadow-sm">
-            {editingId ? <Edit3 className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+      {/* Editor Section */}
+      <section
+        className="rounded-2xl p-6 shadow-sm"
+        style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border)' }}
+      >
+        <div className="mb-6 flex items-center gap-3">
+          <div
+            className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm text-white"
+            style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)' }}
+          >
+            {editingId ? <Edit3 className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-900">{editingId ? 'Edit' : 'Create'} Announcement</p>
-            <p className="text-[11px] text-[var(--color-text-light)]">
+            <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>
+              {editingId ? 'Edit Announcement' : 'Create Context'}
+            </p>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
               {editingId ? 'Update existing announcement details.' : 'Publish a new update to all users.'}
             </p>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid gap-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="grid gap-5">
             <div>
-              <label className="mb-1 block text-[11px] font-medium text-slate-700">Title</label>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Title</label>
               <input
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Announcement title"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-[var(--color-primary)] focus:bg-white focus:outline-none"
+                className="w-full rounded-xl px-4 py-3 text-sm transition-all duration-200 outline-none"
+                style={{
+                  background: 'var(--color-bg)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text)',
+                }}
+                onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] font-medium text-slate-700">Content</label>
+              <label className="mb-2 block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Content</label>
               <textarea
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="What do you want to announce?"
-                rows={3}
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm focus:border-[var(--color-primary)] focus:bg-white focus:outline-none resize-none"
+                rows={4}
+                className="w-full resize-none rounded-xl px-4 py-3 text-sm transition-all duration-200 outline-none"
+                style={{
+                  background: 'var(--color-bg)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text)',
+                }}
+                onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 id="important"
                 checked={important}
                 onChange={(e) => setImportant(e.target.checked)}
-                className="h-4 w-4 rounded border-slate-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]"
+                className="h-4 w-4 rounded accent-[var(--color-primary)] bg-[var(--color-bg)]"
               />
-              <label htmlFor="important" className="text-xs font-medium text-slate-700 select-none">
+              <label htmlFor="important" className="select-none text-sm font-medium" style={{ color: 'var(--color-text)' }}>
                 Mark as important
               </label>
             </div>
           </div>
 
-          {error && <div className="flex items-center gap-2 text-xs text-red-600 bg-red-50 p-2 rounded-lg"><AlertCircle className="h-3.5 w-3.5" />{error}</div>}
-          {success && <div className="flex items-center gap-2 text-xs text-emerald-600 bg-emerald-50 p-2 rounded-lg"><CheckCircle2 className="h-3.5 w-3.5" />{success}</div>}
+          {error && (
+            <div className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium" style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
+              <AlertCircle className="h-4 w-4" />{error}
+            </div>
+          )}
+          {success && (
+            <div className="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium" style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)' }}>
+              <CheckCircle2 className="h-4 w-4" />{success}
+            </div>
+          )}
 
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-3 pt-2">
             {editingId && (
               <button
                 type="button"
                 onClick={resetForm}
-                className="rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+                className="rounded-full px-5 py-2 text-xs font-semibold transition-all duration-200"
+                style={{ background: 'transparent', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-text)'; e.currentTarget.style.borderColor = 'var(--color-text-muted)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.borderColor = 'var(--color-border)'; }}
               >
                 Cancel
               </button>
@@ -160,40 +194,47 @@ const ManageAnnouncements = () => {
             <button
               type="submit"
               disabled={submitting}
-              className="rounded-full bg-[var(--color-primary)] px-6 py-1.5 text-xs font-semibold text-white hover:bg-[var(--color-primary-hover)] disabled:opacity-60 transition shadow-sm"
+              className="btn-primary rounded-full px-6 py-2 text-sm font-semibold shadow-sm transition-all duration-200 disabled:opacity-50"
             >
-              {submitting ? 'Saving...' : editingId ? 'Update' : 'Publish'}
+              {submitting ? 'Saving...' : editingId ? 'Update Context' : 'Publish Announcement'}
             </button>
           </div>
         </form>
       </section>
 
-      <section className="space-y-4">
+      {/* History Section */}
+      <section className="space-y-4 pt-4">
         <div className="flex items-center gap-2">
-          <Megaphone className="h-4 w-4 text-slate-400" />
-          <h2 className="text-sm font-semibold text-slate-900">Announcement History</h2>
+          <Megaphone className="h-5 w-5" style={{ color: 'var(--color-primary)' }} />
+          <h2 className="text-base font-bold" style={{ color: 'var(--color-text)' }}>Announcement History</h2>
         </div>
 
         {loading ? (
           <Loader />
         ) : announcements.length === 0 ? (
-          <div className="rounded-2xl bg-white p-10 text-center ring-1 ring-slate-200">
-            <p className="text-sm text-[var(--color-text-light)]">No announcements found.</p>
+          <div className="rounded-2xl p-10 text-center" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+            <p className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>No announcements history found.</p>
           </div>
         ) : (
-          <div className="grid gap-3">
+          <div className="grid gap-4">
             {announcements.map((ann) => (
-              <div key={ann._id} className="group relative flex flex-col gap-2 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 transition hover:shadow-md">
+              <div
+                key={ann._id}
+                className="group relative flex flex-col gap-3 rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5"
+                style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-card)' }}
+              >
                 <div className="flex items-center justify-between">
-                   <div className="flex items-center gap-2">
-                      <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ring-1 ring-inset ${
-                        ann.important 
-                          ? 'bg-rose-50 text-rose-700 ring-rose-100' 
-                          : 'bg-slate-50 text-slate-600 ring-slate-100'
-                      }`}>
+                   <div className="flex items-center gap-3">
+                      <span
+                        className="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
+                        style={{
+                          background: ann.important ? 'var(--color-primary)' : 'rgba(124,58,237,0.1)',
+                          color: ann.important ? '#fff' : 'var(--color-primary-soft)',
+                        }}
+                      >
                         {ann.important ? 'Important' : 'Standard'}
                       </span>
-                      <span className="text-[10px] text-slate-400">
+                      <span className="text-[11px] font-medium" style={{ color: 'var(--color-text-muted)' }}>
                         {new Date(ann.createdAt).toLocaleDateString(undefined, {
                           year: 'numeric',
                           month: 'short',
@@ -201,25 +242,37 @@ const ManageAnnouncements = () => {
                         })}
                       </span>
                    </div>
-                   <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button 
+
+                   {/* Actions visible on hover inside group */}
+                   <div className="flex items-center gap-1 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
                         onClick={() => handleEdit(ann)}
-                        className="p-1.5 text-slate-400 hover:text-[var(--color-primary)] hover:bg-slate-50 rounded-lg transition"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors duration-200"
+                        style={{ color: 'var(--color-text-muted)' }}
+                        onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-primary)'; e.currentTarget.style.background = 'rgba(124,58,237,0.1)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
                         title="Edit"
                       >
                         <Edit3 className="h-4 w-4" />
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDelete(ann._id)}
-                        className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-slate-50 rounded-lg transition"
+                        className="flex h-8 w-8 items-center justify-center rounded-lg transition-colors duration-200"
+                        style={{ color: 'var(--color-text-muted)' }}
+                        onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
                         title="Delete"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
                    </div>
                 </div>
-                <h3 className="text-sm font-semibold text-slate-900">{ann.title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{ann.content}</p>
+                <div>
+                  <h3 className="text-base font-bold" style={{ color: 'var(--color-text)' }}>{ann.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed" style={{ color: 'var(--color-text-muted)', whiteSpace: 'pre-wrap' }}>
+                    {ann.content}
+                  </p>
+                </div>
               </div>
             ))}
           </div>

@@ -15,22 +15,28 @@ const CommentItem = ({ comment, canEdit, onUpdate, onDelete, updatingId, deletin
   };
 
   return (
-    <div className="flex gap-3 rounded-xl bg-slate-50/60 p-3 ring-1 ring-slate-100">
+    <div
+      className="flex gap-4 rounded-2xl p-4 transition-colors duration-200"
+      style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+    >
       <Avatar size="sm" name={user?.name} />
-      <div className="flex-1 space-y-1">
-        <div className="flex items-center justify-between gap-2">
+      <div className="flex-1 space-y-2">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
-            <p className="text-xs font-semibold text-slate-900">{user?.name}</p>
-            <p className="text-[11px] text-(--color-text-light)">
-              {date.toLocaleDateString()} •{' '}
+            <p className="text-sm font-bold" style={{ color: 'var(--color-text)' }}>{user?.name}</p>
+            <p className="text-[11px] font-medium uppercase tracking-wider mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
+              {date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })} •{' '}
               {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </p>
           </div>
           {canEdit && (
-            <div className="flex items-center gap-1 text-[11px] text-slate-500">
+            <div className="flex items-center gap-1.5 self-start sm:self-auto">
               <button
                 type="button"
-                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 hover:bg-slate-100"
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition-all duration-200"
+                style={{ color: 'var(--color-text-muted)', background: 'transparent' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-primary)'; e.currentTarget.style.background = 'rgba(124,58,237,0.1)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
                 onClick={() => setIsEditing((prev) => !prev)}
                 disabled={deletingId === _id}
               >
@@ -39,7 +45,10 @@ const CommentItem = ({ comment, canEdit, onUpdate, onDelete, updatingId, deletin
               </button>
               <button
                 type="button"
-                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-red-600 hover:bg-red-50"
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold transition-all duration-200"
+                style={{ color: 'var(--color-text-muted)', background: 'transparent' }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
                 onClick={() => onDelete?.(_id)}
                 disabled={deletingId === _id}
               >
@@ -50,41 +59,58 @@ const CommentItem = ({ comment, canEdit, onUpdate, onDelete, updatingId, deletin
           )}
         </div>
         {isEditing ? (
-          <div className="space-y-2">
+          <div className="space-y-3 pt-1">
             <textarea
               rows={3}
-              className="w-full resize-none rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-800 focus:border-(--color-primary) focus:outline-none"
+              className="w-full resize-none rounded-xl px-4 py-3 text-sm transition-all duration-200 outline-none"
+              style={{
+                background: 'var(--color-bg)',
+                border: '1px solid var(--color-border)',
+                color: 'var(--color-text)',
+              }}
               value={value}
               onChange={(e) => setValue(e.target.value)}
+              onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }}
+              onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
             />
-            <div className="flex justify-end gap-2 text-[11px]">
+            <div className="flex justify-end gap-3 text-xs">
               <button
                 type="button"
-                className="rounded-full border border-slate-200 bg-white px-3 py-1 font-medium text-slate-700 hover:bg-slate-50"
+                className="rounded-full px-5 py-2 font-semibold transition-all duration-200"
+                style={{ background: 'transparent', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }}
+                onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-text)'; e.currentTarget.style.borderColor = 'var(--color-text-muted)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.borderColor = 'var(--color-border)'; }}
                 onClick={() => setIsEditing(false)}
               >
                 Cancel
               </button>
               <button
                 type="button"
-                className="rounded-full bg-(--color-primary) px-3 py-1 font-semibold text-white hover:bg-(--color-primary-hover)"
+                className="btn-primary rounded-full px-5 py-2 font-semibold shadow-sm transition-all duration-200 disabled:opacity-50"
                 onClick={handleSave}
                 disabled={updatingId === _id}
               >
-                {updatingId === _id ? 'Saving' : 'Save'}
+                {updatingId === _id ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
           </div>
         ) : (
-          <p className="text-sm text-slate-800">{text}</p>
+          <div className="pt-1">
+            <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text)', whiteSpace: 'pre-wrap' }}>
+              {text}
+            </p>
+          </div>
         )}
         {!canEdit && (
-          <div className="mt-1 flex items-center gap-3 text-[11px] text-slate-500">
+          <div className="mt-2 flex items-center gap-3">
             <button
               type="button"
-              className="inline-flex items-center gap-1 hover:text-(--color-primary-hover)"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold transition-colors duration-200"
+              style={{ color: 'var(--color-text-muted)' }}
+              onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-primary)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; }}
             >
-              <MessageCircle className="h-3 w-3" />
+              <MessageCircle className="h-3.5 w-3.5" />
               <span>Reply</span>
             </button>
           </div>
@@ -95,4 +121,3 @@ const CommentItem = ({ comment, canEdit, onUpdate, onDelete, updatingId, deletin
 };
 
 export default CommentItem;
-

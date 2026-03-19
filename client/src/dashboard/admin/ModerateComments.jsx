@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Trash2 } from 'lucide-react';
+import { Trash2, MessageCircle } from 'lucide-react';
 import { getAllCommentsAdmin, deleteComment } from '../../services/commentService.js';
 import Loader from '../../components/Loader.jsx';
 
@@ -43,6 +43,7 @@ const ModerateComments = () => {
   }, []);
 
   const handleDelete = async (blogId, commentId) => {
+    if (!window.confirm('Are you sure you want to remove this comment?')) return;
     setDeletingId(commentId);
     try {
       await deleteComment(blogId, commentId);
@@ -55,66 +56,92 @@ const ModerateComments = () => {
   };
 
   return (
-    <div className="space-y-4">
-      <header>
-        <h1 className="text-sm font-semibold text-slate-900">Moderate comments</h1>
-        <p className="text-xs text-(--color-text-light)">
-          Review and remove comments that violate community guidelines.
-        </p>
+    <div className="space-y-6">
+      <header className="flex items-center gap-3">
+        <div
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-sm"
+          style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)' }}
+        >
+          <MessageCircle className="h-5 w-5" />
+        </div>
+        <div>
+          <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Moderate Comments</h1>
+          <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Review and remove comments that violate community guidelines.
+          </p>
+        </div>
       </header>
 
       {loading && <Loader />}
       {error && !loading && (
-        <p className="text-xs text-red-600">
+        <p className="rounded-lg px-4 py-3 text-sm" style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
           {error}
         </p>
       )}
 
       {!loading && (
-        <div className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
-          <table className="min-w-full text-left text-xs">
-            <thead className="bg-slate-50 text-[11px] uppercase tracking-[0.16em] text-slate-500">
-              <tr>
-                <th className="px-4 py-2">Comment</th>
-                <th className="px-4 py-2">User</th>
-                <th className="px-4 py-2">Blog</th>
-                <th className="px-4 py-2">Date</th>
-                <th className="px-4 py-2 text-right">Actions</th>
+        <div
+          className="overflow-x-auto rounded-2xl shadow-sm"
+          style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-card)' }}
+        >
+          <table className="min-w-full text-left text-sm">
+            <thead>
+              <tr style={{ background: 'var(--color-surface)', borderBottom: '1px solid var(--color-border)' }}>
+                <th className="px-5 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Comment</th>
+                <th className="px-5 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>User</th>
+                <th className="px-5 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Article</th>
+                <th className="px-5 py-3 text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Date</th>
+                <th className="px-5 py-3 text-right text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody>
               {rows.map(({ blogId, blogTitle, blogActive, comment }) => {
                 const date = new Date(comment.createdAt);
                 return (
-                  <tr key={comment._id} className="hover:bg-slate-50/70">
-                    <td className="max-w-xs px-4 py-2 text-slate-800">
-                      <p className="line-clamp-2">{comment.text}</p>
+                  <tr
+                    key={comment._id}
+                    className="transition-colors duration-150"
+                    style={{ borderBottom: '1px solid var(--color-border)' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(124,58,237,0.03)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <td className="max-w-[280px] px-5 py-4 font-semibold" style={{ color: 'var(--color-text)' }}>
+                      <p className="line-clamp-2 leading-relaxed">{comment.text}</p>
                     </td>
-                    <td className="px-4 py-2 text-slate-600">{comment.user?.name}</td>
-                    <td className="px-4 py-2 text-slate-600">
-                      <div className="flex flex-col gap-0.5">
-                        <span className="line-clamp-1">{blogTitle}</span>
-                        <span className={`w-fit rounded-full px-1.5 py-0.5 text-[9px] font-medium ${
-                          blogActive 
-                            ? 'bg-emerald-50 text-emerald-600' 
-                            : 'bg-slate-100 text-slate-500'
-                        }`}>
+                    <td className="px-5 py-4 font-medium" style={{ color: 'var(--color-text-muted)' }}>{comment.user?.name}</td>
+                    <td className="px-5 py-4">
+                      <div className="flex flex-col gap-1.5">
+                        <span className="line-clamp-1 font-medium" style={{ color: 'var(--color-text)' }}>{blogTitle}</span>
+                        <span
+                          className="w-fit rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider"
+                          style={{
+                            background: blogActive ? 'rgba(16,185,129,0.1)' : 'var(--color-surface)',
+                            color: blogActive ? '#10b981' : 'var(--color-text-muted)',
+                          }}
+                        >
                           {blogActive ? 'Active' : 'Hidden'}
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-2 text-slate-500">
-                      {date.toLocaleDateString()}
+                    <td className="px-5 py-4 text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                      {date.toLocaleDateString(undefined, {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric'
+                      })}
                     </td>
-                    <td className="px-4 py-2 text-right">
+                    <td className="px-5 py-4 text-right">
                       <button
                         type="button"
                         onClick={() => handleDelete(blogId, comment._id)}
                         disabled={deletingId === comment._id}
-                        className="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-1 text-[11px] text-red-600 hover:bg-red-100 disabled:opacity-60"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg transition-colors duration-200 disabled:opacity-50"
+                        style={{ color: 'var(--color-text-muted)' }}
+                        onMouseEnter={e => { e.currentTarget.style.color = '#ef4444'; e.currentTarget.style.background = 'rgba(239,68,68,0.1)'; }}
+                        onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
+                        title="Delete Comment"
                       >
-                        <Trash2 className="h-3 w-3" />
-                        {deletingId === comment._id ? 'Deleting' : 'Delete'}
+                        <Trash2 className="h-4 w-4" />
                       </button>
                     </td>
                   </tr>
@@ -129,4 +156,3 @@ const ModerateComments = () => {
 };
 
 export default ModerateComments;
-

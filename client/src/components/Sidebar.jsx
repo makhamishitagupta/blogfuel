@@ -1,47 +1,103 @@
 import { NavLink, Link } from 'react-router-dom';
 
-const Sidebar = ({ links, title }) => {
-  const commonClasses =
-    'flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors';
-
+const Sidebar = ({ links, title, isOpen, onClose }) => {
   return (
-    <aside className="w-64 border-r border-slate-200 bg-white/95 px-4 py-6 backdrop-blur-md">
-      <Link to="/" className="mb-4 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-(--color-primary) text-white shadow-sm">
-          <span className="text-xs font-semibold">BF</span>
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-20 bg-black/50 backdrop-blur-sm md:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      {/* Sidebar panel */}
+      <aside
+        className="fixed inset-y-0 left-0 z-30 flex w-64 flex-col transition-transform duration-300 md:static md:translate-x-0"
+        style={{
+          background: 'var(--color-surface-elevated)',
+          borderRight: '1px solid var(--color-border)',
+          transform: isOpen ? 'translateX(0)' : undefined,
+        }}
+      >
+        {/* Logo + brand */}
+        <div
+          className="flex items-center justify-between px-4 py-5"
+          style={{ borderBottom: '1px solid var(--color-border)' }}
+        >
+          <Link to="/" className="flex items-center gap-2.5" onClick={onClose}>
+            <div
+              className="flex h-9 w-9 items-center justify-center rounded-xl text-white text-[11px] font-bold flex-shrink-0"
+              style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)', boxShadow: '0 0 18px rgba(124,58,237,0.4)' }}
+            >
+              BF
+            </div>
+            <div>
+              <p className="text-sm font-bold leading-tight" style={{ color: 'var(--color-text)' }}>
+                Blog<span style={{ color: 'var(--color-primary)' }}>Fuel</span>
+              </p>
+              <p className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
+                {title || 'Dashboard'}
+              </p>
+            </div>
+          </Link>
         </div>
-        <div className="hidden flex-col leading-tight sm:flex">
-          <span className="text-sm font-semibold text-slate-900">BlogFuel</span>
-          <span className="text-[11px] text-(--color-text-light)">
-            {title || 'Dashboard'}
-          </span>
-        </div>
-      </Link>
-      <nav className="space-y-1">
-        {links.map(({ to, icon: Icon, label, end, disabled }) => (
-          <NavLink
-            key={to}
-            to={disabled ? '#' : to}
-            end={end}
-            className={({ isActive }) =>
-              [
-                commonClasses,
-                disabled
-                  ? 'cursor-not-allowed text-slate-300'
-                  : isActive
-                    ? 'bg-(--color-primary) text-white shadow-sm'
-                    : 'text-slate-600 hover:bg-slate-100',
-              ].join(' ')
-            }
+
+        {/* Nav links */}
+        <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">
+          {links.map(({ to, icon: Icon, label, end, disabled }) => (
+            <NavLink
+              key={to}
+              to={disabled ? '#' : to}
+              end={end}
+              onClick={disabled ? undefined : onClose}
+              className={({ isActive }) =>
+                [
+                  'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 group',
+                  disabled
+                    ? 'cursor-not-allowed opacity-40'
+                    : isActive
+                    ? 'text-white shadow-md'
+                    : 'hover:bg-[rgba(124,58,237,0.08)]',
+                ].join(' ')
+              }
+              style={({ isActive }) =>
+                !disabled && isActive
+                  ? { background: 'linear-gradient(135deg, #7c3aed, #9333ea)', color: '#fff' }
+                  : { color: 'var(--color-text-muted)' }
+              }
+            >
+              {({ isActive }) => (
+                <>
+                  <Icon
+                    className="h-4 w-4 flex-shrink-0 transition-colors duration-200"
+                    style={{ color: !disabled && isActive ? '#fff' : undefined }}
+                  />
+                  <span>{label}</span>
+                  {isActive && !disabled && (
+                    <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white/70" />
+                  )}
+                </>
+              )}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Footer link */}
+        <div className="p-3" style={{ borderTop: '1px solid var(--color-border)' }}>
+          <Link
+            to="/"
+            className="flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium transition-all duration-200"
+            style={{ color: 'var(--color-text-muted)' }}
+            onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-primary)'; e.currentTarget.style.background = 'rgba(124,58,237,0.08)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
           >
-            <Icon className="h-4 w-4" />
-            <span>{label}</span>
-          </NavLink>
-        ))}
-      </nav>
-    </aside>
+            ← Back to BlogFuel
+          </Link>
+        </div>
+      </aside>
+    </>
   );
 };
 
 export default Sidebar;
-

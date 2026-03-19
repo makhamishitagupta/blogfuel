@@ -15,7 +15,11 @@ const Avatar = ({ name = 'Alex Writer', size = 'md' }) => {
 
   return (
     <div
-      className={`inline-flex items-center justify-center rounded-full bg-linear-to-tr from-(--color-primary) to-amber-400 font-semibold text-white shadow-sm ${sizes[size]}`}
+      className={`inline-flex items-center justify-center rounded-full font-bold text-white shadow-sm flex-shrink-0 ${sizes[size]}`}
+      style={{
+        background: 'linear-gradient(135deg, #7c3aed, #9333ea)',
+        border: '1px solid rgba(255,255,255,0.1)',
+      }}
     >
       {initials}
     </div>
@@ -23,4 +27,3 @@ const Avatar = ({ name = 'Alex Writer', size = 'md' }) => {
 };
 
 export default Avatar;
-

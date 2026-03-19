@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { User, Activity } from 'lucide-react';
 import Avatar from '../../components/Avatar.jsx';
 import Loader from '../../components/Loader.jsx';
 import { useAuth } from '../../context/AuthContext.jsx';
@@ -54,69 +55,130 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <p className="text-sm text-[var(--color-text-light)]">
+      <p className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
         You need to be logged in to view your profile.
       </p>
     );
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,1.5fr)]">
-      <section className="card flex items-center gap-4 bg-white">
-        <Avatar size="lg" name={user.name} />
-        <div className="space-y-1 w-full">
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900 focus:border-[var(--color-primary)] focus:bg-white focus:outline-none"
-          />
-          <p className="text-sm text-[var(--color-text-light)]">{user.email}</p>
-          {error && <p className="text-xs text-red-600">{error}</p>}
-          {success && <p className="text-xs text-emerald-600">{success}</p>}
-          <div className="mt-2 flex flex-wrap gap-2 text-xs">
-            <button
-              type="button"
-              onClick={handleSave}
-              disabled={saving}
-              className="rounded-full bg-[var(--color-primary)] px-5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[var(--color-primary-hover)] disabled:opacity-60"
-            >
-              {saving ? 'Saving…' : 'Save changes'}
-            </button>
-          </div>
+    <div className="space-y-6">
+      <header className="flex items-center gap-3">
+        <div
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-sm"
+          style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)' }}
+        >
+          <User className="h-5 w-5" />
         </div>
-      </section>
+        <div>
+          <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Your Profile</h1>
+          <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            Manage your personal settings and view your account activity.
+          </p>
+        </div>
+      </header>
 
-      <section className="card bg-white">
-        <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-          Activity
-        </h3>
-        {loadingActivity ? (
-          <Loader />
-        ) : activity ? (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-50 pb-2">
-              <span className="text-xs text-slate-600">Blogs read</span>
-              <span className="text-sm font-bold text-slate-900">{activity.blogsRead}</span>
+      <div className="grid gap-6 md:grid-cols-[minmax(0,2fr)_minmax(0,1.5fr)]">
+        {/* Profile Details Edit */}
+        <section
+          className="rounded-2xl p-6 shadow-sm"
+          style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <div className="flex-shrink-0">
+              <Avatar size="lg" name={user.name} />
             </div>
-            <div className="flex items-center justify-between border-b border-slate-50 pb-2">
-              <span className="text-xs text-slate-600">Blogs saved</span>
-              <span className="text-sm font-bold text-slate-900">{activity.blogsSaved}</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-600">Comments made</span>
-              <span className="text-sm font-bold text-slate-900">{activity.commentsMade}</span>
+            <div className="w-full space-y-4">
+              <div>
+                <label className="mb-2 block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Display Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 outline-none"
+                  style={{
+                    background: 'var(--color-bg)',
+                    border: '1px solid var(--color-border)',
+                    color: 'var(--color-text)',
+                  }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; }}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>Email Address</label>
+                <p className="px-4 py-2 text-sm font-medium" style={{ color: 'var(--color-text-muted)', background: 'var(--color-surface)', borderRadius: '0.5rem', border: '1px solid var(--color-border)' }}>
+                  {user.email}
+                </p>
+              </div>
+
+              {error && (
+                <p className="rounded-lg px-3 py-2 text-xs font-medium" style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
+                  {error}
+                </p>
+              )}
+              {success && (
+                <p className="rounded-lg px-3 py-2 text-xs font-medium" style={{ background: 'rgba(16,185,129,0.1)', color: '#10b981', border: '1px solid rgba(16,185,129,0.2)' }}>
+                  {success}
+                </p>
+              )}
+
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="btn-primary rounded-full w-full sm:w-auto px-8 py-2.5 text-sm font-semibold shadow-sm transition-all duration-200 disabled:opacity-50"
+                >
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
             </div>
           </div>
-        ) : (
-          <p className="text-xs text-[var(--color-text-light)]">
-            No activity data available.
-          </p>
-        )}
-      </section>
+        </section>
+
+        {/* Activity Stats */}
+        <section
+          className="rounded-2xl p-6 shadow-sm flex flex-col"
+          style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-card)' }}
+        >
+          <div className="mb-6 flex items-center gap-2">
+            <Activity className="h-5 w-5" style={{ color: 'var(--color-primary)' }} />
+            <h3 className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--color-text)' }}>
+              Account Activity
+            </h3>
+          </div>
+
+          {loadingActivity ? (
+            <div className="flex-1 flex items-center justify-center">
+              <Loader />
+            </div>
+          ) : activity ? (
+            <div className="flex-1 space-y-5">
+              <div className="flex items-center justify-between pb-4" style={{ borderBottom: '1px solid var(--color-border)' }}>
+                <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Stories Read</span>
+                <span className="text-lg font-black" style={{ color: 'var(--color-text)' }}>{activity.blogsRead}</span>
+              </div>
+              <div className="flex items-center justify-between pb-4" style={{ borderBottom: '1px solid var(--color-border)' }}>
+                <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Stories Saved</span>
+                <span className="text-lg font-black" style={{ color: 'var(--color-text)' }}>{activity.blogsSaved}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>Comments Made</span>
+                <span className="text-lg font-black" style={{ color: 'var(--color-text)' }}>{activity.commentsMade}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 flex items-center justify-center text-center">
+              <p className="text-sm font-medium" style={{ color: 'var(--color-text-muted)' }}>
+                No activity data available yet.
+              </p>
+            </div>
+          )}
+        </section>
+      </div>
     </div>
   );
 };
 
 export default Profile;
-

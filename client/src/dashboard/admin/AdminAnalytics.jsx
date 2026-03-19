@@ -43,14 +43,17 @@ const AdminAnalytics = () => {
     : 0;
 
   return (
-    <div className="space-y-4">
-      <header className="flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-900 text-white">
-          <BarChart3 className="h-4 w-4" />
+    <div className="space-y-6">
+      <header className="flex items-center gap-3">
+        <div
+          className="flex h-10 w-10 items-center justify-center rounded-xl text-white shadow-sm"
+          style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)' }}
+        >
+          <BarChart3 className="h-5 w-5" />
         </div>
         <div>
-          <h1 className="text-sm font-semibold text-slate-900">Analytics</h1>
-          <p className="text-xs text-(--color-text-light)">
+          <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Analytics</h1>
+          <p className="text-sm mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
             A lightweight view of how content is distributed.
           </p>
         </div>
@@ -58,27 +61,33 @@ const AdminAnalytics = () => {
 
       {loading && <Loader />}
       {error && !loading && (
-        <p className="text-xs text-red-600">
+        <p className="rounded-lg px-4 py-3 text-sm" style={{ background: 'rgba(239,68,68,0.1)', color: '#ef4444', border: '1px solid rgba(239,68,68,0.2)' }}>
           {error}
         </p>
       )}
 
       {!loading && (
-        <section className="card bg-white text-xs">
-          <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+        <section
+          className="rounded-2xl p-6 shadow-sm"
+          style={{ background: 'var(--color-surface-elevated)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-card)' }}
+        >
+          <h2 className="mb-5 text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-muted)' }}>
             Posts by author
           </h2>
-          <div className="space-y-2">
+          <div className="space-y-4">
             {Object.entries(byAuthor).map(([author, count]) => (
-              <div key={author} className="space-y-1">
+              <div key={author} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-800">{author}</span>
-                  <span className="text-[11px] text-slate-500">{count} posts</span>
+                  <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>{author}</span>
+                  <span className="text-xs font-medium" style={{ color: 'var(--color-text-muted)' }}>{count} posts</span>
                 </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-slate-100">
+                <div className="h-2 overflow-hidden rounded-full" style={{ background: 'var(--color-surface)' }}>
                   <div
-                    className="h-full rounded-full bg-linear-to-r from-orange-500 to-amber-400"
-                    style={{ width: `${maxCount ? (count / maxCount) * 100 : 0}%` }}
+                    className="h-full rounded-full transition-all duration-1000 ease-out"
+                    style={{
+                      width: `${maxCount ? (count / maxCount) * 100 : 0}%`,
+                      background: 'linear-gradient(90deg, #7c3aed, #a855f7)',
+                    }}
                   />
                 </div>
               </div>
@@ -91,4 +100,3 @@ const AdminAnalytics = () => {
 };
 
 export default AdminAnalytics;
-

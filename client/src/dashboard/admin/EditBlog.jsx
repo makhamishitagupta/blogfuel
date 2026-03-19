@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Bold, Italic, Underline, Heading2, Image, Link2, List, Quote } from 'lucide-react';
+import { Bold, Italic, Underline, Heading2, Image, Link2, List, Quote, Save, X } from 'lucide-react';
 import { getBlogById, updateBlog } from '../../services/blogService.js';
 import Loader from '../../components/Loader.jsx';
+import ReactMarkdown from 'react-markdown';
 
 const EditBlog = () => {
   const { id } = useParams();
@@ -14,6 +15,7 @@ const EditBlog = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
   const textareaRef = useRef(null);
 
   const handleTagAdd = (e) => {
@@ -79,17 +81,14 @@ const EditBlog = () => {
         setTags(data.blog.tags || []);
       } catch (err) {
         if (!active) return;
-        const message =
-          err?.response?.data?.message || err?.message || 'Failed to load blog.';
+        const message = err?.response?.data?.message || err?.message || 'Failed to load blog.';
         setError(message);
       } finally {
         if (active) setLoading(false);
       }
     };
     load();
-    return () => {
-      active = false;
-    };
+    return () => { active = false; };
   }, [id]);
 
   const handleSave = async () => {
@@ -103,21 +102,18 @@ const EditBlog = () => {
       await updateBlog(id, { title, content, tags });
       navigate('/dashboard/admin/blogs');
     } catch (err) {
-      const message =
-        err?.response?.data?.message || err?.message || 'Failed to save changes.';
+      const message = err?.response?.data?.message || err?.message || 'Failed to save changes.';
       setError(message);
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) {
-    return <Loader />;
-  }
+  if (loading) return <Loader />;
 
   if (error && !title && !content) {
     return (
-      <div className="text-sm text-(--color-text-light)">
+      <div className="text-sm" style={{ color: 'var(--color-text-muted)' }}>
         {error}
       </div>
     );
@@ -125,55 +121,123 @@ const EditBlog = () => {
 
   return (
     <div className="space-y-4">
-      <header>
-        <h1 className="text-sm font-semibold text-slate-900">Edit blog</h1>
-        <p className="text-xs text-(--color-text-light)">
-          Update the title and content of this story.
-        </p>
+      {/* Header */}
+      <header className="flex items-center justify-between">
+        <div>
+          <h1 className="text-lg font-black" style={{ color: 'var(--color-text)' }}>
+            Edit Blog
+          </h1>
+          <p className="text-xs mt-0.5" style={{ color: 'var(--color-text-muted)' }}>
+            Update the title and content of this story.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setShowPreview(p => !p)}
+          className="text-xs font-semibold rounded-lg px-3 py-1.5 transition-all duration-200"
+          style={
+            showPreview
+              ? { background: 'var(--color-primary)', color: '#fff' }
+              : { background: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)' }
+          }
+        >
+          {showPreview ? 'Edit' : 'Preview'}
+        </button>
       </header>
 
-      <section className="space-y-3 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
-        {error && (
-          <p className="text-xs text-red-600">
-            {error}
-          </p>
-        )}
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-900 focus:border-(--color-primary) focus:bg-white focus:outline-none"
-        />
-        <div className="flex flex-wrap gap-1 rounded-xl bg-slate-50 px-2 py-1.5 text-xs text-slate-600">
+      {/* Editor */}
+      <section
+        className="rounded-xl overflow-hidden"
+        style={{
+          background: 'var(--color-surface-elevated)',
+          border: '1px solid var(--color-border)',
+          boxShadow: 'var(--shadow-card)',
+        }}
+      >
+        {/* Title input */}
+        <div className="px-5 pt-5">
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full border-b-2 bg-transparent pb-3 text-xl font-black focus:outline-none transition-colors duration-200"
+            style={{
+              color: 'var(--color-text)',
+              borderColor: title ? 'var(--color-primary)' : 'var(--color-border)',
+            }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }}
+            onBlur={e => { e.currentTarget.style.borderColor = title ? 'var(--color-primary)' : 'var(--color-border)'; }}
+          />
+        </div>
+
+        {/* Toolbar */}
+        <div
+          className="flex flex-wrap gap-1 px-4 py-2"
+          style={{ borderBottom: '1px solid var(--color-border)', background: 'var(--color-surface)' }}
+        >
           {toolbar.map(({ icon: Icon, label, action }) => (
             <button
               key={label}
               type="button"
               onClick={action}
-              className="inline-flex items-center gap-1 rounded-lg px-2 py-1 hover:bg-slate-100"
+              title={label}
+              className="inline-flex items-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium transition-all duration-200"
+              style={{ color: 'var(--color-text-muted)' }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(124,58,237,0.1)';
+                e.currentTarget.style.color = 'var(--color-primary)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'var(--color-text-muted)';
+              }}
             >
               <Icon className="h-3.5 w-3.5" />
               <span className="hidden sm:inline">{label}</span>
             </button>
           ))}
         </div>
-        <textarea
-          ref={textareaRef}
-          rows={10}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="w-full resize-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm leading-relaxed text-slate-800 focus:border-(--color-primary) focus:bg-white focus:outline-none"
-        />
-        
-        <div className="space-y-2 py-2">
-          <label className="text-[11px] font-semibold text-slate-700 uppercase tracking-widest">Tags</label>
-          <div className="flex flex-wrap gap-1.5 mb-1">
+
+        {/* Content */}
+        {showPreview ? (
+          <div className="px-5 py-5 min-h-[240px]">
+            <p className="text-[10px] font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--color-primary)' }}>
+              Preview
+            </p>
+            <div className="prose-blog">
+              <ReactMarkdown>{content || '*Nothing to preview yet...*'}</ReactMarkdown>
+            </div>
+          </div>
+        ) : (
+          <textarea
+            ref={textareaRef}
+            rows={10}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="w-full resize-none bg-transparent px-5 py-4 text-sm leading-relaxed font-mono focus:outline-none"
+            style={{ color: 'var(--color-text)' }}
+          />
+        )}
+
+        {/* Tags */}
+        <div
+          className="px-5 py-4 space-y-2"
+          style={{ borderTop: '1px solid var(--color-border)' }}
+        >
+          <label className="text-[10px] font-bold uppercase tracking-wider" style={{ color: 'var(--color-text)' }}>
+            Tags
+          </label>
+          <div className="flex flex-wrap gap-1.5">
             {tags.map(tag => (
-              <span key={tag} className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
-                {tag}
-                <button 
+              <span
+                key={tag}
+                className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold text-white"
+                style={{ background: 'var(--color-primary)' }}
+              >
+                #{tag}
+                <button
                   onClick={() => removeTag(tag)}
-                  className="ml-0.5 hover:text-red-500 transition-colors"
+                  className="ml-0.5 opacity-80 hover:opacity-100 transition-opacity"
                 >
                   ×
                 </button>
@@ -186,24 +250,50 @@ const EditBlog = () => {
             value={tagInput}
             onChange={(e) => setTagInput(e.target.value)}
             onKeyDown={handleTagAdd}
-            className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs focus:border-(--color-primary) focus:bg-white focus:outline-none transition"
+            className="input-base text-xs"
           />
         </div>
-        <div className="flex justify-end gap-2 text-xs">
+
+        {/* Error */}
+        {error && (
+          <div className="px-5 pb-2">
+            <p
+              className="rounded-lg px-3 py-2 text-xs text-red-400"
+              style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.2)' }}
+            >
+              {error}
+            </p>
+          </div>
+        )}
+
+        {/* Actions */}
+        <div
+          className="flex items-center justify-end gap-2 px-5 py-3"
+          style={{ borderTop: '1px solid var(--color-border)', background: 'var(--color-surface)' }}
+        >
           <button
             type="button"
-            className="rounded-full border border-slate-200 bg-white px-3 py-1.5 font-medium text-slate-700 hover:bg-slate-50"
+            className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-xs font-semibold transition-all duration-200"
+            style={{
+              border: '1.5px solid var(--color-border)',
+              color: 'var(--color-text-muted)',
+              background: 'transparent',
+            }}
             onClick={() => navigate('/dashboard/admin/blogs')}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.color = 'var(--color-primary)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-text-muted)'; }}
           >
+            <X className="h-3.5 w-3.5" />
             Discard
           </button>
           <button
             type="button"
             onClick={handleSave}
             disabled={saving}
-            className="rounded-full bg-(--color-primary) px-3 py-1.5 font-semibold text-white hover:bg-(--color-primary-hover) disabled:opacity-60"
+            className="btn-primary text-xs py-2 px-5 disabled:opacity-60"
           >
-            {saving ? 'Saving…' : 'Save changes'}
+            <Save className="h-3.5 w-3.5" />
+            {saving ? 'Saving…' : 'Save Changes'}
           </button>
         </div>
       </section>
@@ -212,4 +302,3 @@ const EditBlog = () => {
 };
 
 export default EditBlog;
-
