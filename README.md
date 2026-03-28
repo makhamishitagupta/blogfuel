@@ -1,7 +1,7 @@
-# BlogFuel: Full-Stack MERN Technical Documentation
+# MoneyCorner: Full-Stack MERN Technical Documentation
 
 ## 1. Project Overview
-**BlogFuel** is a modern, full-stack blog publishing platform designed for developers, designers, and writers to share insights and build a community. The application provides a seamless experience for both readers and content creators, featuring a robust administration system for content management.
+**MoneyCorner** is a modern, full-stack blog publishing platform designed for developers, designers, and writers to share insights and build a community. The application provides a seamless experience for both readers and content creators, featuring a robust administration system for content management.
 
 ### Main Features
 *   **Dynamic Blog System**: Create, read, update, and delete blogs with markdown support.
@@ -74,7 +74,7 @@ The core content entity.
 ---
 
 ## 5. Authentication System
-BlogFuel implements a hybrid authentication system.
+MoneyCorner implements a hybrid authentication system.
 
 ### Email/Password Flow
 1.  **Hashed storage**: Passwords are saved using `bcrypt` (12 rounds).

@@ -77,9 +77,9 @@ const Login = () => {
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-8">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/20 text-white text-xs font-bold">
-                BF
+                MC
               </div>
-              <span className="text-lg font-bold text-white">BlogFuel</span>
+              <span className="text-lg font-bold text-white">MoneyCorner</span>
             </div>
             <h2 className="text-2xl font-black text-white leading-tight mb-3">
               Your thoughts deserve a platform.

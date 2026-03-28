@@ -116,7 +116,7 @@ const ManageUsers = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@blogfuel.com"
+                placeholder="admin@moneycorner.com"
                 className="w-full rounded-xl px-4 py-3 text-sm transition-all duration-200 outline-none"
                 style={{
                   background: 'var(--color-bg)',

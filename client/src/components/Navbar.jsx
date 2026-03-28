@@ -14,7 +14,7 @@ const Navbar = () => {
   const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {
-    const stored = window.localStorage.getItem('bf-theme');
+    const stored = window.localStorage.getItem('mc-theme');
     const initial = stored === 'light' || stored === 'dark' ? stored : 'dark';
     setTheme(initial);
     document.documentElement.setAttribute('data-theme', initial);
@@ -22,7 +22,7 @@ const Navbar = () => {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    window.localStorage.setItem('bf-theme', theme);
+    window.localStorage.setItem('mc-theme', theme);
   }, [theme]);
 
   useEffect(() => {
@@ -85,14 +85,14 @@ const Navbar = () => {
               boxShadow: '0 0 20px rgba(124, 58, 237, 0.5)',
             }}
           >
-            BF
+            MC
           </div>
           <div className="hidden flex-col leading-tight sm:flex">
             <span
               className="text-sm font-bold tracking-tight"
               style={{ color: 'var(--color-text)' }}
             >
-              Blog
+              Money
               <span
                 style={{
                   background: 'linear-gradient(135deg, #a855f7, #7c3aed)',
@@ -101,7 +101,7 @@ const Navbar = () => {
                   backgroundClip: 'text',
                 }}
               >
-                Fuel
+                Corner
               </span>
             </span>
             <span

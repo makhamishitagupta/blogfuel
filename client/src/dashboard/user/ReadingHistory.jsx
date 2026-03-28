@@ -47,7 +47,7 @@ const ReadingHistory = () => {
         <div>
           <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Reading History</h1>
           <p className="mt-0.5 text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            Stories you’ve opened recently across BlogFuel.
+            Stories you’ve opened recently across MoneyCorner.
           </p>
         </div>
       </header>

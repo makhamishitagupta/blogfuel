@@ -73,7 +73,7 @@ const Home = () => {
 
         <div className="relative z-10 space-y-6 max-w-2xl">
           <p className="text-[11px] font-bold uppercase tracking-[0.3em]" style={{ color: 'rgba(168,85,247,0.9)' }}>
-            Welcome to BlogFuel
+            Welcome to MoneyCorner
           </p>
           <h1 className="text-balance font-black leading-[1.05] tracking-tight" style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)' }}>
             Discover Stories That{' '}

@@ -12,8 +12,8 @@ const Footer = () => {
           {/* About */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg text-white text-[10px] font-bold" style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)' }}>BF</div>
-              <span className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>Blog<span style={{ color: 'var(--color-primary)' }}>Fuel</span></span>
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg text-white text-[10px] font-bold" style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)' }}>MC</div>
+              <span className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>Money<span style={{ color: 'var(--color-primary)' }}>Corner</span></span>
             </div>
             <p className="text-xs leading-relaxed max-w-xs" style={{ color: 'var(--color-text-muted)' }}>
               A curated reading platform for developers, designers, and curious minds. All content is hand-crafted by our editorial team.
@@ -72,8 +72,8 @@ const Footer = () => {
       <div className="border-t" style={{ borderColor: 'var(--color-border)' }}>
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-4 py-4 text-xs sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
-            <div className="flex h-5 w-5 items-center justify-center rounded text-white text-[8px] font-bold" style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)' }}>BF</div>
-            <p style={{ color: 'var(--color-text-muted)' }}>© {year} BlogFuel. All rights reserved.</p>
+            <div className="flex h-5 w-5 items-center justify-center rounded text-white text-[8px] font-bold" style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)' }}>MC</div>
+            <p style={{ color: 'var(--color-text-muted)' }}>© {year} MoneyCorner. All rights reserved.</p>
           </div>
           <div className="flex items-center gap-4">
             {['Terms', 'Privacy'].map(label => (

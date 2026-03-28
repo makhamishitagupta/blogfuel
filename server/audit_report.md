@@ -1,6 +1,6 @@
-# Technical Audit & Improvement Report: BlogFuel MERN App
+# Technical Audit & Improvement Report: MoneyCorner MERN App
 
-I have completed a thorough review and refactoring of the **BlogFuel** project. The focus was on securing the authentication flow, improving error handling, and standardizing the project architecture for better scalability.
+I have completed a thorough review and refactoring of the **MoneyCorner** project. The focus was on securing the authentication flow, improving error handling, and standardizing the project architecture for better scalability.
 
 ## 1. Project Structure & Architecture
 *   **Centralized Error Handling**: Implemented [AppError](file:///i:/2026/blog-fuel/server/utils/appError.js#1-11) and [catchAsync](file:///i:/2026/blog-fuel/server/utils/catchAsync.js#1-6) patterns in the backend to eliminate repetitive try-catch blocks and ensure consistent error responses.

@@ -14,7 +14,7 @@ const DashboardLayout = ({ type }) => {
   // Sync with the global theme set by Navbar
   useEffect(() => {
     const sync = () => {
-      const stored = window.localStorage.getItem('bf-theme');
+      const stored = window.localStorage.getItem('mc-theme');
       setTheme(stored === 'light' ? 'light' : 'dark');
     };
     sync();
@@ -26,7 +26,7 @@ const DashboardLayout = ({ type }) => {
   const toggleTheme = () => {
     const next = theme === 'dark' ? 'light' : 'dark';
     setTheme(next);
-    window.localStorage.setItem('bf-theme', next);
+    window.localStorage.setItem('mc-theme', next);
     document.documentElement.setAttribute('data-theme', next);
   };
 
@@ -137,7 +137,7 @@ const DashboardLayout = ({ type }) => {
               onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.color = 'var(--color-primary)'; }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--color-border)'; e.currentTarget.style.color = 'var(--color-text-muted)'; }}
             >
-              ← BlogFuel
+              ← MoneyCorner
             </Link>
           </div>
         </header>

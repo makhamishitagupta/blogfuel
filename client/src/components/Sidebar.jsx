@@ -30,11 +30,11 @@ const Sidebar = ({ links, title, isOpen, onClose }) => {
               className="flex h-9 w-9 items-center justify-center rounded-xl text-white text-[11px] font-bold flex-shrink-0"
               style={{ background: 'linear-gradient(135deg, #7c3aed, #9333ea)', boxShadow: '0 0 18px rgba(124,58,237,0.4)' }}
             >
-              BF
+              MC
             </div>
             <div>
               <p className="text-sm font-bold leading-tight" style={{ color: 'var(--color-text)' }}>
-                Blog<span style={{ color: 'var(--color-primary)' }}>Fuel</span>
+                Money<span style={{ color: 'var(--color-primary)' }}>Corner</span>
               </p>
               <p className="text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
                 {title || 'Dashboard'}
@@ -92,7 +92,7 @@ const Sidebar = ({ links, title, isOpen, onClose }) => {
             onMouseEnter={e => { e.currentTarget.style.color = 'var(--color-primary)'; e.currentTarget.style.background = 'rgba(124,58,237,0.08)'; }}
             onMouseLeave={e => { e.currentTarget.style.color = 'var(--color-text-muted)'; e.currentTarget.style.background = 'transparent'; }}
           >
-            ← Back to BlogFuel
+            ← Back to MoneyCorner
           </Link>
         </div>
       </aside>
